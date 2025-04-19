@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heart Disease Prediction Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1588776814546-ec6f95c859ba?auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #00ffe5;
+    }
+    header, footer {
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(26, 26, 26, 0.8);
+      box-shadow: 0 0 20px #00ffe5;
+    }
+    .neon-text {
+      font-size: 2em;
+      color: #00ffe5;
+      text-shadow: 0 0 10px #00ffe5, 0 0 20px #00ffe5, 0 0 30px #00ffe5;
+    }
+    .container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: rgba(31, 31, 31, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px #00ffe5;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .login {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: rgba(26, 26, 26, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffe5;
+    }
+    input[type="text"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #00ffe5;
+      border: none;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    .about {
+      background-color: rgba(18, 18, 18, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .image-upload {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: rgba(26, 26, 26, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffe5;
+      text-align: center;
+    }
+    .image-upload img {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1 class="neon-text">Heart Disease Prediction Dashboard</h1>
+  </header>
+
+  <section class="login">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button>Login</button>
+    <h3>Upload Patient Data</h3>
+    <input type="file" accept=".json,.csv,.xlsx">
+  </section>
+
+  <section class="image-upload">
+    <h3>Upload Image</h3>
+    <input type="file" accept="image/*" onchange="loadImage(event)">
+    <img id="previewImage" src="#" alt="Preview Image" style="display:none;">
+  </section>
+
+  <div class="container">
+    <div class="card">
+      <h3>Age Distribution</h3>
+      <canvas id="ageChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Cholesterol Levels</h3>
+      <canvas id="cholesterolChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Heart Rate Analysis</h3>
+      <canvas id="heartRateChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Prediction Summary</h3>
+      <canvas id="predictionPieChart"></canvas>
+    </div>
+  </div>
+
+  <section class="about">
+    <h2>About the Developer</h2>
+    <img src="https://avatars.githubusercontent.com/vigneshgitz" alt="Developer Profile" style="width:150px;border-radius:50%;margin:20px auto;box-shadow:0 0 10px #00ffe5;">
+    <p>Developed by Vignesh R - AI & Data Science Enthusiast.<br>
+    GitHub: <a href="https://github.com/vigneshgitz" target="_blank" style="color:#00ffe5">github.com/vigneshgitz</a><br>
+    LinkedIn: <a href="https://www.linkedin.com/in/vignesh-r-05927b269/?originalSubdomain=in" target="_blank" style="color:#00ffe5">linkedin.com/in/vignesh-r</a></p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Heart Disease Prediction Dashboard</p>
+  </footer>
+
+  <script>
+    function loadImage(event) {
+      const image = document.getElementById('previewImage');
+      image.src = URL.createObjectURL(event.target.files[0]);
+      image.style.display = 'block';
+    }
+
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    new Chart(ageCtx, {
+      type: 'bar',
+      data: {
+        labels: ['20-30', '31-40', '41-50', '51-60', '61-70'],
+        datasets: [{
+          label: 'Patients',
+          data: [12, 19, 15, 22, 10],
+          backgroundColor: '#00ffe5'
+        }]
+      }
+    });
+
+    const cholCtx = document.getElementById('cholesterolChart').getContext('2d');
+    new Chart(cholCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Cholesterol Level',
+          data: [200, 220, 180, 210, 190],
+          borderColor: '#00ffe5',
+          fill: false
+        }]
+      }
+    });
+
+    const heartCtx = document.getElementById('heartRateChart').getContext('2d');
+    new Chart(heartCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Normal', 'Elevated', 'High'],
+        datasets: [{
+          data: [60, 25, 15],
+          backgroundColor: ['#00ffe5', '#00c2b8', '#007f7a']
+        }]
+      }
+    });
+
+    const predictionCtx = document.getElementById('predictionPieChart').getContext('2d');
+    new Chart(predictionCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Low Risk', 'Moderate Risk', 'High Risk'],
+        datasets: [{
+          data: [50, 30, 20],
+          backgroundColor: ['#00ffe5', '#ffaa00', '#ff0055']
+        }]
+      }
+    });
+  </script>
+</body>
+</html>
